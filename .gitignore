@@ -31,3 +31,11 @@ secrets.json
 
 # Others
 *.sqlite3
+*.sqlite
+.venv/
+.cache/
+Lib/
+Scripts/
+pyvenv.cfg
+skinport_bullish.html
+

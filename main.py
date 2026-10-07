@@ -301,9 +301,9 @@ def main():
         print("🚀 Features: Async requests, Smart caching, Adaptive rate limiting")
     else:
         print("📊 Sequential fetching: ENABLED (install aiohttp for concurrent mode)")
-        print("🚀 Features: Smart caching, Rate limiting, Fee-aware arbitrage")
+        print("🚀 Features: Smart caching, Rate limiting, Fee-aware spread scanning")
 
-    print("💰 Platform fees: Skinport 0% buying + Steam 15% selling")
+    print("💰 Platform fees: Skinport 0% buying + exact Steam seller fee model")
 
     if not TQDM_AVAILABLE:
         print("📊 Install tqdm for better progress bars: pip install tqdm")
@@ -390,14 +390,14 @@ def main():
         print("\n❌ No items matched your criteria across all selected games.")
         return
 
-    # Apply Steam data and calculate arbitrage
-    print("\n💰 Applying Steam data and calculating fee-aware arbitrage...")
+    # Apply Steam data and calculate spreads
+    print("\n💰 Applying Steam data and calculating fee-aware spreads...")
     steam_data_applied = 0
 
     if TQDM_AVAILABLE:
-        apply_progress = tqdm(all_rows, desc="Applying fee-aware arbitrage", unit="items")
+        apply_progress = tqdm(all_rows, desc="Applying fee-aware spreads", unit="items")
     else:
-        apply_progress = tqdm(total=len(all_rows), desc="Applying fee-aware arbitrage", unit="items")
+        apply_progress = tqdm(total=len(all_rows), desc="Applying fee-aware spreads", unit="items")
 
     try:
         for i, row in enumerate(all_rows if TQDM_AVAILABLE else range(len(all_rows))):
@@ -437,7 +437,7 @@ def main():
         apply_progress.close()
 
     if fetch_steam:
-        print(f"✅ Applied fee-aware Steam arbitrage data to {steam_data_applied}/{len(all_rows)} items")
+        print(f"✅ Applied fee-aware Steam spread data to {steam_data_applied}/{len(all_rows)} items")
     print(f"💱 Currency consistency: All prices in {currency}")
 
     # Analyze candidates
@@ -535,6 +535,32 @@ def main():
     processing_mode = "concurrent" if AIOHTTP_AVAILABLE else "sequential"
     print(f"\n🎉 High-speed {processing_mode} analysis complete!")
     print(f"📊 Processed {len(all_rows)} items across {len(selected_games)} game(s)")
+
+    # Run summary
+    from collections import Counter
+    import statistics
+
+    label_counts = Counter(r.get("Arbitrage_Opportunity", "UNKNOWN") for r in all_rows)
+    print("\n--- Classification Summary ---")
+    for label, count in sorted(label_counts.items()):
+        print(f"  {label}: {count}")
+
+    positive_profits = []
+    for r in all_rows:
+        try:
+            val = float(str(r.get("Fee_Aware_Profit", "0%")).rstrip("%") or 0)
+            if val > 0:
+                positive_profits.append(val)
+        except (ValueError, TypeError):
+            pass
+
+    if positive_profits:
+        med_profit = statistics.median(positive_profits)
+        print(f"Items with positive spread: {len(positive_profits)}")
+        print(f"Median positive spread: {med_profit:.2f}%")
+    else:
+        print("Items with positive spread: 0")
+        print("Median positive spread: N/A")
 
 
 if __name__ == "__main__":

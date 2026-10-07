@@ -57,7 +57,6 @@ STEAM_CURRENCY_MAP = {
 # Platform fees
 SKINPORT_FEE_RATE = 0.08
 SKINPORT_FEE_RATE_HIGH = 0.06
-STEAM_FEE_RATE = 0.15
 
 # Arbitrage thresholds
 MIN_PROFIT_PERCENTAGE = 10.0
@@ -150,8 +149,20 @@ STEAM_HEADERS = [
 ]
 
 # Cache settings
-CACHE_DIR = Path.home() / ".skinport_skin_cache"
-CACHE_DIR.mkdir(parents=True, exist_ok=True)
+import os
+_cache_env = os.getenv("SKINPORT_CACHE_DIR")
+if _cache_env:
+    CACHE_DIR = Path(_cache_env)
+else:
+    try:
+        CACHE_DIR = Path.home() / ".skinport_skin_cache"
+        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    except (PermissionError, OSError):
+        CACHE_DIR = Path.cwd() / ".cache"
+try:
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+except (PermissionError, OSError):
+    pass
 DEFAULT_CACHE_TTL = 43200   # 12 hours
 STEAM_CACHE_TTL = 43200     # 12 hours
 
