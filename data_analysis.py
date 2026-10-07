@@ -4,8 +4,9 @@
 import math
 from typing import Dict, Any, List, Tuple, Optional
 
+from fees import steam_seller_receives, steam_price_needed
 from config import (
-    STEAM_FEE_RATE, MIN_PROFIT_PERCENTAGE, GOOD_PROFIT_PERCENTAGE, 
+    MIN_PROFIT_PERCENTAGE, GOOD_PROFIT_PERCENTAGE, 
     HIGH_VOLUME_THRESHOLD, EXPLOSIVENESS_WEIGHTS, MOMENTUM_SHORT_CAP,
     MOMENTUM_MED_CAP, SCARCITY_THRESHOLD, DISCOUNT_CAP, VOLUME_SURGE_MULTIPLIER,
     PUMP_DETECTION
@@ -28,13 +29,13 @@ def compute_fee_aware_arbitrage_opportunity(skinport_price: float, steam_price: 
     if not steam_price or steam_price <= 0:
         return "NO_STEAM_DATA", 0.0, breakdown
 
-    steam_fee_amount = steam_price * STEAM_FEE_RATE
-    net_steam_proceeds = steam_price - steam_fee_amount
+    net_steam_proceeds = steam_seller_receives(steam_price)
+    steam_fee_amount = steam_price - net_steam_proceeds
     gross_profit = net_steam_proceeds - skinport_price
     profit_percentage = (gross_profit / skinport_price) * 100 if skinport_price > 0 else 0
 
-    required_steam_breakeven = skinport_price / (1 - STEAM_FEE_RATE)
-    required_steam_good = skinport_price * (1 + MIN_PROFIT_PERCENTAGE/100) / (1 - STEAM_FEE_RATE)
+    required_steam_breakeven = steam_price_needed(skinport_price)
+    required_steam_good = steam_price_needed(skinport_price * (1 + MIN_PROFIT_PERCENTAGE / 100))
 
     breakdown.update({
         "steam_fee": steam_fee_amount,
