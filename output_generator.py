@@ -93,7 +93,7 @@ def generate_html_with_candidates(candidates: List[Dict[str, Any]], rows: List[D
         "Name", "Chart", "Skinport", "Steam", "SP Price", "Steam Price", "Fee-Aware Profit", 
         "Net Steam", "Currency", "SP Sales7d", "Steam Sales7d", "SP 7d avg", "SP 24h avg", 
         "SP 30d avg", "Steam Explosiveness", "SP 7d vs 30d", "SP Growth", 
-        "SP Bullish", "SP Expl", "PumpRisk", "Arbitrage", "Source"
+        "SP Bullish", "SP Expl", "PumpRisk", "Spread after fees", "Source"
     ]
 
     header_html = "<tr>" + "".join([f'<th>{h}<span class="sort-arrow"> ▼</span></th>' for h in table_headers]) + "</tr>"
@@ -213,10 +213,13 @@ def generate_html_with_candidates(candidates: List[Dict[str, Any]], rows: List[D
     <div class="container">
         <h1>{escape_html(title)}</h1>
         <div class="meta">Generated: {timestamp}</div>
+        <div class="cand-note" style="background:#0f172a;border-left:4px solid #f59e0b;color:#cbd5e1;padding:10px 14px;margin-bottom:16px;border-radius:4px;">
+            <strong>⚠️ Notice:</strong> Steam sale proceeds are Steam Wallet funds and cannot be withdrawn to a bank. Trade holds expose you to price moves. Not financial advice.
+        </div>
 """
 
     if candidates:
-        html += f"<div class='cand-note'><strong>🎯 Fee-Aware Top Candidates:</strong> {len(candidates)} item(s) with profitable arbitrage after platform fees</div>"
+        html += f"<div class='cand-note'><strong>🎯 Fee-Aware Top Candidates:</strong> {len(candidates)} item(s) with positive spread after fees</div>"
         html += f"<div class='card table-wrap'><table class='sortable-table'><thead>{header_html}</thead><tbody>"
         html += "".join(cand_rows)
         html += "</tbody></table></div>"
