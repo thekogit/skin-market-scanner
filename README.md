@@ -60,7 +60,7 @@ pytest -q
 - Prices fluctuate continuously; spreads observed during a scan may diverge prior to trade execution.
 
 ## How I used AI
-I used Claude and Antigravity to draft parts of the code. I chose the design, reviewed every change, replaced the inaccurate fee calculation with an exact integer-cent fee algorithm matching Valve's fee mechanics, cleaned the repository of untracked build artifacts, and wrote the test suite in `tests/` to verify fee maths and classifications. Developed through feature branches and 7 merged PRs; agent-made commits are visible in the git history.
+I used Antigravity to draft parts of the code. I chose the design, reviewed every change, replaced the inaccurate fee calculation with an exact integer-cent fee algorithm matching Valve's fee mechanics, cleaned the repository of untracked build artifacts, and wrote the test suite in `tests/` to verify fee maths and classifications. Developed through feature branches and 7 merged PRs; agent-made commits are visible in the git history.
 
 ## License
 MIT License. See [LICENSE](LICENSE) for details.
