@@ -16,23 +16,35 @@ Finding pricing discrepancies between third-party gaming marketplaces and the St
 - Generates an interactive, dark-themed HTML report with sortable tables, fee breakdowns, and price charts.
 
 ## Results
-Benchmark summary from a full market scan:
+Summary from a live scan (Counter-Strike 2, USD, $10–$100, volume ≥ 50 sales/week):
 
 ```bash
 python main.py
 ```
 
-`CS2, 2026-10-08: 4,821 items scanned, 128 with a positive spread after fees, median positive spread: +7.82%`
+```text
+Processed 23 items across 1 game(s)
 
-| Classification | Criteria | Count |
+--- Classification Summary ---
+  NO_STEAM_DATA: 1
+  BREAKEVEN: 2
+  MARGINAL_PROFIT: 3
+  SMALL_LOSS: 17
+
+Items with positive spread: 5
+Median positive spread: 6.20%
+```
+
+| Classification | Spread Range | Count |
 |---|---|---|
-| EXCELLENT_BUY | Spread ≥ 20%, 7d volume ≥ 50 | 12 |
-| GOOD_BUY | Spread ≥ 10%, 7d volume ≥ 50 | 34 |
-| GOOD_BUY_LOW_VOL | Spread ≥ 10%, 7d volume < 50 | 82 |
-| MARGINAL_PROFIT | Spread 5% to 10% | 196 |
-| BREAKEVEN | Spread 0% to 5% | 310 |
-| SMALL_LOSS | Spread -10% to 0% | 1,420 |
-| OVERPRICED | Spread < -10% | 2,767 |
+| EXCELLENT_BUY | ≥ +20%, 7d volume ≥ 50 | 0 |
+| GOOD_BUY | ≥ +10%, 7d volume ≥ 50 | 0 |
+| GOOD_BUY_LOW_VOL | ≥ +10%, 7d volume < 50 | 0 |
+| MARGINAL_PROFIT | +5% to +10% | 3 |
+| BREAKEVEN | 0% to +5% | 2 |
+| SMALL_LOSS | -10% to 0% | 17 |
+| NO_STEAM_DATA | Missing / unlisted | 1 |
+| **Total** | | **23** |
 
 ## Quickstart
 Compatible with Python 3.10–3.12:
